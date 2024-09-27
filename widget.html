@@ -1,45 +1,77 @@
-<!-- Dropdowns for user interaction -->
-<label for="region">Region:</label>
-<select id="region">
-  <option value="NEU">NEU</option>
-  <option value="MED">MED</option>
-  <option value="WCE">WCE</option>
-  <option value="EEU">EEU</option>
-</select>
+<html lang="en"></html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- <title>Page with Global Font</title> -->
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;  /* Set your global font here */
+    }
+    
+    /* Optional: Customize dropdowns further */
+    select {
+      font-size: 14px;  /* You can set specific font sizes for elements */
+      padding: 5px;
+    }
 
-<label for="dataset">Dataset:</label>
-<select id="dataset">
-  <option value="CMIP6">CMIP6</option>
-  <option value="CORDEX">CORDEX</option>
-</select>
+    .container {
+      max-width: 80%;                /* Set the width of the container */
+      margin: 0 auto;            /* Center horizontally */
+      text-align: center;         /* Center the text inside */
+      padding: 20px;
+      background-color: white;
+      /* box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); */
+    }
+  </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Dropdowns for user interaction -->
+        <label for="region">Region:</label>
+        <select id="region">
+        <option value="NEU">NEU</option>
+        <option value="MED">MED</option>
+        <option value="WCE">WCE</option>
+        <option value="EEU">EEU</option>
+        </select>
 
-<label for="variable">Variable:</label>
-<select id="variable">
-  <!-- Options will be populated dynamically -->
-</select>
+        <label for="dataset">Dataset:</label>
+        <select id="dataset">
+        <option value="CMIP6">CMIP6</option>
+        <option value="CORDEX">CORDEX</option>
+        </select>
 
-<label for="time_filter">Time Filter:</label>
-<select id="time_filter">
-  <option value="year">Year</option>
-  <option value="DecFeb">Dec-Feb</option>
-  <option value="MarMay">Mar-May</option>
-  <option value="JunAug">Jun-Aug</option>
-  <option value="SepNov">Sep-Nov</option>
-</select>
+        <label for="variable">Variable:</label>
+        <select id="variable">
+        <!-- Options will be populated dynamically -->
+        </select>
 
-<label for="timeframe">Timeframe:</label>
-<select id="timeframe">
-  <option value="2021">2021</option>
-  <option value="2041">2041</option>
-  <option value="2081">2081</option>
-</select>
+        <label for="time_filter">Time Filter:</label>
+        <select id="time_filter">
+        <option value="year">Year</option>
+        <option value="DecFeb">Dec-Feb</option>
+        <option value="MarMay">Mar-May</option>
+        <option value="JunAug">Jun-Aug</option>
+        <option value="SepNov">Sep-Nov</option>
+        </select>
 
-<!-- Include Plotly.js and D3.js -->
-<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-<script src="https://d3js.org/d3.v6.min.js"></script>
+        <label for="timeframe">Timeframe:</label>
+        <select id="timeframe">
+        <option value="2021">2021</option>
+        <option value="2041">2041</option>
+        <option value="2081">2081</option>
+        </select>
 
-<!-- Div for the plot -->
-<div id="plotDiv"></div>
+        <!-- Include Plotly.js and D3.js -->
+        <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+        <script src="https://d3js.org/d3.v6.min.js"></script>
+
+        <!-- Div for the plot -->
+        <div id="plotDiv"></div>
+    </div>
+</body>
+
+
 
 <script>
     // Variable full names and units
