@@ -1,8 +1,9 @@
+<!--
 <html lang="en"></html>
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- <title>Page with Global Font</title> -->
+   <title>Page with Global Font</title> 
   <style>
     body {
       font-family: 'Arial', sans-serif;  /* Set your global font here */
@@ -24,54 +25,62 @@
     }
   </style>
 </head>
-<body>
-    <div class="container">
-        <!-- Dropdowns for user interaction -->
-        <label for="region">Region:</label>
-        <select id="region">
-        <option value="NEU">NEU</option>
-        <option value="MED">MED</option>
-        <option value="WCE">WCE</option>
-        <option value="EEU">EEU</option>
-        </select>
+<body>-->
+<div class="container">
+  <!-- Dropdowns for user interaction -->
 
-        <label for="dataset">Dataset:</label>
-        <select id="dataset">
-        <option value="CMIP6">CMIP6</option>
-        <option value="CORDEX">CORDEX</option>
-        </select>
+  <label for="region">Region:</label>
+  <select id="region">
+    <option value="NEU">NEU</option>
+    <option value="MED">MED</option>
+    <option value="WCE">WCE</option>
+    <option value="EEU">EEU</option>
+  </select>
 
-        <label for="variable">Variable:</label>
-        <select id="variable">
-        <!-- Options will be populated dynamically -->
-        </select>
+  <label for="dataset">Dataset:</label>
+  <select id="dataset">
+    <option value="CMIP6">CMIP6</option>
+    <option value="CORDEX">CORDEX</option>
+  </select>
 
-        <label for="time_filter">Time Filter:</label>
-        <select id="time_filter">
-        <option value="year">Year</option>
-        <option value="DecFeb">Dec-Feb</option>
-        <option value="MarMay">Mar-May</option>
-        <option value="JunAug">Jun-Aug</option>
-        <option value="SepNov">Sep-Nov</option>
-        </select>
+  <label for="variable">Variable:</label>
+  <select id="variable">
+    <!-- Options will be populated dynamically -->
+  </select>
 
-        <label for="timeframe">Timeframe:</label>
-        <select id="timeframe">
-        <option value="2021">2021</option>
-        <option value="2041">2041</option>
-        <option value="2081">2081</option>
-        </select>
+  <label for="time_filter">Time Filter:</label>
+  <select id="time_filter">
+    <option value="year">Year</option>
+    <option value="DecFeb">Dec-Feb</option>
+    <option value="MarMay">Mar-May</option>
+    <option value="JunAug">Jun-Aug</option>
+    <option value="SepNov">Sep-Nov</option>
+  </select>
 
-        <!-- Include Plotly.js and D3.js -->
-        <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-        <script src="https://d3js.org/d3.v6.min.js"></script>
+  <label for="timeframe">Timeframe:</label>
+  <select id="timeframe">
+    <option value="2021">2021</option>
+    <option value="2041">2041</option>
+    <option value="2081">2081</option>
+  </select>
+  
+  <!-- Div for the plot -->
+  <div id="plotDiv"></div>
+</div>
 
-        <!-- Div for the plot -->
-        <div id="plotDiv"></div>
-    </div>
-</body>
+<script>
+  require.config({
+    paths: {
+      "d3": "https://d3js.org/d3.v6.min",
+      "Plotly": "https://cdn.plot.ly/plotly-latest.min"
+    }
+  });
+</script>
 
-
+<!-- Include Plotly.js and D3.js
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+<script src="https://d3js.org/d3.v6.min.js"></script>
+-->
 
 <script>
     // Variable full names and units
@@ -167,33 +176,36 @@
       const unit = variableUnits[variable] || 'days';
     
       // File path to CSV data
-      const dataFilePath = `data/${region}/${region}_${dataset}_preIndustrial_landmask=True.csv`;
+      const dataFilePath = `http://127.0.0.1:8000/crabook/notebooks/CLIMATE_SCENARIOS/data/${region}/${region}_${dataset}_preIndustrial_landmask=True.csv`;
     
       // Load data using D3
-      d3.csv(dataFilePath).then(function(data) {
-        // Filter and process the data
-        const filteredData = data.filter(function(d) {
-          return (
-            d.variable === variable &&
-            d.date === timeframe &&
-            d.season === timeFilter
-          );
+      require(["d3", "Plotly"], (d3, Plotly) => {
+        d3.csv(dataFilePath).then(function(data) {
+          // Filter and process the data
+          const filteredData = data.filter(function(d) {
+            return (
+              d.variable === variable &&
+              d.date === timeframe &&
+              d.season === timeFilter
+            );
+          });
+
+      
+          if (filteredData.length === 0) {
+            // Display message if data is not available
+            displayNoDataMessage(Plotly, variableFullName, dataset, region, timeFilter, timeframe);
+            return;
+          }
+      
+          // Process data for plotting
+          const plotData = processData(filteredData, dataset);
+      
+          // Render the plot
+          renderPlot(Plotly, plotData, variableFullName, unit, dataset, region, timeFilter, timeframe);
+        }).catch(function(error) {
+          console.error('Error loading data:', error);
+          displayNoDataMessage(Plotly, variableFullName, dataset, region, timeFilter, timeframe);
         });
-    
-        if (filteredData.length === 0) {
-          // Display message if data is not available
-          displayNoDataMessage(variableFullName, dataset, region, timeFilter, timeframe);
-          return;
-        }
-    
-        // Process data for plotting
-        const plotData = processData(filteredData, dataset);
-    
-        // Render the plot
-        renderPlot(plotData, variableFullName, unit, dataset, region, timeFilter, timeframe);
-      }).catch(function(error) {
-        console.error('Error loading data:', error);
-        displayNoDataMessage(variableFullName, dataset, region, timeFilter, timeframe);
       });
     }
 </script>
@@ -232,7 +244,7 @@
     
     
 <script>
-function renderPlot(data, variableFullName, unit, dataset, region, timeFilter, timeframe) {
+function renderPlot(Plotly, data, variableFullName, unit, dataset, region, timeFilter, timeframe) {
     const traces = [];
     const yMapping = {'Model': 0, 'SSP': 1, 'SSP Extension': 2};
 
@@ -339,7 +351,7 @@ function renderPlot(data, variableFullName, unit, dataset, region, timeFilter, t
 </script>
     
 <script>
-    function displayNoDataMessage(variableFullName, dataset, region, timeFilter, timeframe) {
+    function displayNoDataMessage(Plotly, variableFullName, dataset, region, timeFilter, timeframe) {
       const layout = {
         height: 500,
         margin: {l: 20, r: 20, t: 50, b: 50},
@@ -375,5 +387,6 @@ function renderPlot(data, variableFullName, unit, dataset, region, timeFilter, t
 
 <script>
     // Initialize the plot when the page loads
-    updatePlot();
+    document.addEventListener("DOMContentLoaded", updatePlot);
+    //updatePlot();
 </script>
