@@ -252,11 +252,15 @@ def plot_widget():
             linewidth=1
         )
 
+        if dataset == 'CMIP6':
+            scenario_mean = 'SSP'
+        else:
+            scenario_mean = 'RCP'
         # Set y-axis properties
         fig.update_yaxes(
             tickmode='array',
             tickvals=[y_mapping['Model'], y_mapping['SSP'], y_mapping['SSP Extension']],
-            ticktext=['Model', 'SSP', ''],
+            ticktext=['Model', scenario_mean, ''],
             showgrid=False,
             zeroline=False
         )

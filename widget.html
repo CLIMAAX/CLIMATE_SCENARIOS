@@ -281,6 +281,7 @@ function renderPlot(data, variableFullName, unit, dataset, region, timeFilter, t
 
     // Set x-axis properties
     const xAxisTitle = `Change in ${variableFullName} [${unit}]`;
+    const scenario_label = dataset === 'CMIP6' ? 'SSP' : 'RCP';
 
     // Layout configuration
     const layout = {
@@ -305,7 +306,7 @@ function renderPlot(data, variableFullName, unit, dataset, region, timeFilter, t
     yaxis: {
         tickmode: 'array',
         tickvals: [yMapping['Model'], yMapping['SSP'], yMapping['SSP Extension']],
-        ticktext: ['Model', 'SSP', ''],
+        ticktext: ['Model', scenario_label, ''],
         showgrid: false,
         zeroline: false
     },
