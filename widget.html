@@ -149,8 +149,7 @@
     const unit = variableUnits[variable] || 'days';
   
     // File path to CSV data
-    const dataFilePath = `https://raw.githubusercontent.com/CLIMAAX/CLIMATE_SCENARIOS/refs/heads/main/data/${region}/${region}_${dataset}_preIndustrial_landmask=True.csv`;
-  
+    const dataFilePath = `https://raw.githubusercontent.com/CLIMAAX/CLIMATE_SCENARIOS/refs/heads/main/data/${region}/${region}_${dataset}_preIndustrial_landmask%3Dtrue.csv`;
     // Load data with D3
     require(["d3", "Plotly"], (d3, Plotly) => {
       d3.csv(dataFilePath).then(function(data) {
